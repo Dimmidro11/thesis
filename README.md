@@ -25,17 +25,17 @@
 2. Откройте загруженный проект c помощью IntelliJ IDEA;
 3. Откройте терминал в IDEA, напишите в нем `docker compose up`, дождитесь завершения запуска контейнера (в логах `ready for connections`);
 4. Откройте дополнительный терминал в IDEA и напишите в нем `java -jar ./artifacts/aqa-shop.jar`, 
-дождитесь завершения запуска (в логах `Started ShopApplication`)
+дождитесь завершения запуска (в логах `Started ShopApplication`);
 5. Откройте дополнительный терминал в IDEA и напишите в нем `./gradlew clean test allureReport`, дождитесь завершения тестов (в логах `BUILD FAILED/SUCCESSFUL`);
-6. Напишите в терминале `./gradlew allureserve`;
+6. Напишите в терминале `./gradlew allureServe`;
 7. В браузере откроется страница с результатами тестирования Allure.
 
 
 ## Проектная документация
 
-[План тестирования]()
+[План тестирования](https://github.com/Dimmidro11/thesis/blob/master/docs/Plan.md)
 
 ## Отчетная документация
 
-[Отчет о тестировании]()
-[Отчет об автоматизации]()
+[Отчет о тестировании](https://github.com/Dimmidro11/thesis/blob/master/docs/Report.md)  
+[Отчет об автоматизации](https://github.com/Dimmidro11/thesis/blob/master/docs/Summary.md)
