@@ -12,8 +12,6 @@ import javax.xml.crypto.Data;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TravelTest {
-    public static final String approvedCard = "1111222233334444";
-    public static final String declineCard = "5555666677778888";
     public static final String hit = "APPROVED";
     public static final String fail = "DECLINED";
 
@@ -45,7 +43,7 @@ public class TravelTest {
     @Test
     @DisplayName("Successful buy on APPROVED card")
     void shouldSuccessfulBuyOnApprovedCard() {
-        var card = DataHelper.generateCard(approvedCard);
+        var card = DataHelper.generateValidCard(true);
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
         buyPage.fillForm(card);
@@ -57,7 +55,7 @@ public class TravelTest {
     @Test
     @DisplayName("Fail buy on DECLINED card")
     void shouldFailedBuyOnDeclinedCard() {
-        var card = DataHelper.generateCard(declineCard);
+        var card = DataHelper.generateValidCard(false);
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
         buyPage.fillForm(card);
@@ -68,10 +66,10 @@ public class TravelTest {
 
     @Test
     @DisplayName("Successful buy on APPROVED card with holder 2 latin symbol")
-    void shouldFailedBuyOnApprocedCardWithHolder2Symbol() {
+    void shouldFailedBuyOnApprovedCardWithHolder2Symbol() {
         var date = DataHelper.generateValidDate();
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 date.getMonth(),
                 date.getYear(),
                 DataHelper.generateHolder2Symbol(),
@@ -89,7 +87,7 @@ public class TravelTest {
     @DisplayName("Successful buy on APPROVED card, but month is 01")
     void shouldSuccessfulBuyOnApprovedCardButMonthIs1() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 "01",
                 DataHelper.generateYearAboveCurrentByTerm(1, true),
                 DataHelper.generateValidHolder(),
@@ -107,7 +105,7 @@ public class TravelTest {
     @DisplayName("Successful buy on APPROVED card, but month is 12")
     void shouldSuccessfulBuyOnApprovedCardButMonthIs12() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 "12",
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -125,7 +123,7 @@ public class TravelTest {
     @DisplayName("Successful buy on APPROVED card, but year is valid max (more by 5)")
     void shouldSuccessfulBuyOnApprovedCardButYearMoreBy5() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateValidDate().getMonth(),
                 DataHelper.generateYearAboveCurrentByTerm(5, true),
                 DataHelper.generateValidHolder(),
@@ -153,7 +151,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAllFieldError(card);
+        buyPage.checkAllFieldError(card, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -162,14 +160,14 @@ public class TravelTest {
         var card = DataHelper.generateCard("");
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "number", "emptyField");
+        buyPage.checkFieldError(card, "number", "Поле обязательно для заполнения");
     }
 
     @Test
     @DisplayName("Should get error, empty field Month")
     void shouldGetErrorEmptyFieldMonth() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 "",
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -177,14 +175,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "emptyField");
+        buyPage.checkFieldError(card, "month", "Поле обязательно для заполнения");
     }
 
     @Test
     @DisplayName("Should get error, empty field Year")
     void shouldGetErrorEmptyFieldYear() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateValidDate().getMonth(),
                 "",
                 DataHelper.generateValidHolder(),
@@ -192,7 +190,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "emptyField");
+        buyPage.checkFieldError(card, "year", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -200,7 +198,7 @@ public class TravelTest {
     void shouldGetErrorEmptyFieldHolder() {
         var date = DataHelper.generateValidDate();
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 date.getMonth(),
                 date.getYear(),
                 "",
@@ -208,7 +206,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "holder", "emptyField");
+        buyPage.checkFieldError(card, "holder", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -216,7 +214,7 @@ public class TravelTest {
     void shouldGetErrorEmptyFieldCvc() {
         var date = DataHelper.generateValidDate();
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 date.getMonth(),
                 date.getYear(),
                 DataHelper.generateValidHolder(),
@@ -224,7 +222,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "cvc", "emptyField");
+        buyPage.checkFieldError(card, "cvc", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -355,7 +353,7 @@ public class TravelTest {
     @DisplayName("Should get error, invalid month less min")
     void shouldGetErrorInvalidMonthLessMin() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 "00",
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -363,14 +361,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "incorrectDate");
+        buyPage.checkFieldError(card, "month", "Неверно указан срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid month equals 13")
     void shouldGetErrorInvalidMonthEquals13() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 "13",
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -378,14 +376,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "incorrectDate");
+        buyPage.checkFieldError(card, "month", "Неверно указан срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid month above max")
     void shouldGetErrorInvalidMonthAboveMax() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateRandomNumber2Symbol(14, 99),
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -393,14 +391,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "incorrectDate");
+        buyPage.checkFieldError(card, "month", "Неверно указан срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid month less current, year current")
     void shouldGetErrorInvalidMonthLessCurrentYearCurrent() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateMonthLessCurrent(),
                 DataHelper.generateCurrentDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -408,14 +406,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "expiredCard");
+        buyPage.checkFieldError(card, "month", "Истёк срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid year less current by 1")
     void shouldGetErrorInvalidYearLessCurrentBy1() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateCurrentDate().getMonth(),
                 DataHelper.generateYearAboveCurrentByTerm(1, false),
                 DataHelper.generateValidHolder(),
@@ -423,14 +421,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "expiredCard");
+        buyPage.checkFieldError(card, "year", "Истёк срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid year less current")
     void shouldGetErrorInvalidYearLessCurrent() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateCurrentDate().getMonth(),
                 DataHelper.generateRandomNumber2Symbol(0,
                         (Integer.parseInt(DataHelper.generateCurrentDate().getYear())) - 2),
@@ -439,14 +437,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "expiredCard");
+        buyPage.checkFieldError(card, "year", "Истёк срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid year above current by 6")
     void shouldGetErrorInvalidYearAboveCurrentBy1() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateCurrentDate().getMonth(),
                 DataHelper.generateYearAboveCurrentByTerm(6, true),
                 DataHelper.generateValidHolder(),
@@ -454,14 +452,14 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "incorrectDate");
+        buyPage.checkFieldError(card, "year", "Неверно указан срок действия карты");
     }
 
     @Test
     @DisplayName("Should get error, invalid year above max")
     void shouldGetErrorInvalidYearAboveMax() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateCurrentDate().getMonth(),
                 DataHelper.generateRandomNumber2Symbol((Integer.parseInt(DataHelper.generateCurrentDate().getYear()) + 6), 99),
                 DataHelper.generateValidHolder(),
@@ -469,7 +467,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "incorrectDate");
+        buyPage.checkFieldError(card, "year", "Неверно указан срок действия карты");
     }
 
     @Test
@@ -478,7 +476,7 @@ public class TravelTest {
         var card = DataHelper.generateCard(DataHelper.generateRequiredNumber(1, 15));
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "number", "invalidFormat");
+        buyPage.checkFieldError(card, "number", "Неверный формат");
     }
 
     @Test
@@ -493,7 +491,7 @@ public class TravelTest {
     @DisplayName("Should get error, Month less 2 numbers")
     void shouldGetErrorMonthLess2Numbers() {
         var card = new DataHelper.CardInfo(
-          approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
           DataHelper.generateRandomNumber(),
           DataHelper.generateValidDate().getYear(),
           DataHelper.generateValidHolder(),
@@ -501,7 +499,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "month", "invalidFormat");
+        buyPage.checkFieldError(card, "month", "Неверный формат");
     }
 
     @Test
@@ -516,7 +514,7 @@ public class TravelTest {
     @DisplayName("Should get error, Year less 2 numbers")
     void shouldGetErrorYearLess2Numbers() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateCurrentDate().getMonth(),
                 DataHelper.generateRandomNumber(),
                 DataHelper.generateValidHolder(),
@@ -524,7 +522,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "year", "invalidFormat");
+        buyPage.checkFieldError(card, "year", "Неверный формат");
     }
 
     @Test
@@ -539,7 +537,7 @@ public class TravelTest {
     @DisplayName("Should get error, Holder less min (1 symbol)")
     void shouldGetErrorHolderLessMin1Symbol() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateValidDate().getMonth(),
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateLatinString(1, 1),
@@ -547,7 +545,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "holder", "invalidFormat");
+        buyPage.checkFieldError(card, "holder", "Неверный формат");
     }
 
     @Test
@@ -562,7 +560,7 @@ public class TravelTest {
     @DisplayName("Should get error, CVC less min (2 symbols)")
     void shouldGetErrorCvcLessMin2Symbols() {
         var card = new DataHelper.CardInfo(
-                approvedCard,
+                DataHelper.generateValidCard(true).getNumber(),
                 DataHelper.generateValidDate().getMonth(),
                 DataHelper.generateValidDate().getYear(),
                 DataHelper.generateValidHolder(),
@@ -570,7 +568,7 @@ public class TravelTest {
         );
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkFieldError(card, "cvc", "invalidFormat");
+        buyPage.checkFieldError(card, "cvc", "Неверный формат");
     }
 
     @Test
