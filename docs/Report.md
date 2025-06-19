@@ -65,5 +65,5 @@
 ## Интеграция с системами отчётности
 Приложены автоматизированные отчёты:
 
-- [Allure Report](https://github.com/user-attachments/assets/69c4c6bc-eb9d-4ac0-80dd-3b83ad4fe3c4)
-
+- [Allure Report](![image](https://github.com/user-attachments/assets/69c4c6bc-eb9d-4ac0-80dd-3b83ad4fe3c4)
+)
