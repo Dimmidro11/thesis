@@ -48,15 +48,6 @@ public class BuyPage {
         put("cvc", cvcError);
     }};
 
-    Map<String, String> errors = new HashMap<>() {{
-        put("success", "Операция одобрена Банком");
-        put("error", "Ошибка! Банк отказал в проведении операции.");
-        put("emptyField", "Поле обязательно для заполнения");
-        put("incorrectDate", "Неверно указан срок действия карты");
-        put("expiredCard", "Истёк срок действия карты");
-        put("invalidFormat", "Неверный формат");
-    }};
-
     public void BuyPage() {
         numberField.shouldBe(visible);
         monthField.shouldBe(visible);
@@ -77,20 +68,20 @@ public class BuyPage {
 
     public void checkSuccessfulNotification() {
         successNotification.shouldBe(visible, Duration.ofSeconds(15)).
-                shouldHave(text(errors.get("success")));
+                shouldHave(text("Операция одобрена Банком"));
         successNotificationClose.click();
         errorNotification.shouldNotBe(visible,Duration.ofSeconds(5));
     }
 
     public void checkErrorNotification() {
         errorNotification.shouldBe(visible,Duration.ofSeconds(15)).
-                shouldHave(text(errors.get("error")));
+                shouldHave(text("Ошибка! Банк отказал в проведении операции."));
         errorNotificationClose.click();
         successNotification.shouldNotBe(visible,Duration.ofSeconds(5));
     }
 
-    public void findFieldError(String field, String typeError) {
-        fieldsError.get(field).shouldBe(visible).shouldHave(text(errors.get(typeError)));
+    public void findFieldError(String field, String error) {
+        fieldsError.get(field).shouldBe(visible).shouldHave(text(error));
     }
 
     public void checkFieldError(DataHelper.CardInfo cardInfo, String field, String typeError) {
@@ -98,13 +89,13 @@ public class BuyPage {
         findFieldError(field, typeError);
     }
 
-    public void checkAllFieldError(DataHelper.CardInfo cardInfo) {
+    public void checkAllFieldError(DataHelper.CardInfo cardInfo, String error) {
         fillForm(cardInfo);
-        findFieldError("number", "emptyField");
-        findFieldError("month", "emptyField");
-        findFieldError("year", "emptyField");
-        findFieldError("holder", "emptyField");
-        findFieldError("cvc", "emptyField");
+        findFieldError("number", error);
+        findFieldError("month", error);
+        findFieldError("year", error);
+        findFieldError("holder", error);
+        findFieldError("cvc", error);
     }
 
     public void checkEmptyAfterInput(String field, String input) {
@@ -115,21 +106,22 @@ public class BuyPage {
         String expectedValue = "";
         switch (field) {
             case "number":
-                expectedValue = input.substring(0, Math.min(input.length(), 16));
+                expectedValue = DataHelper.cutAboveMaxSymbols(input, 16);
                 expectedValue = expectedValue.replaceAll(".{4}", "$0 ").trim();
                 break;
             case "month":
             case "year":
-                expectedValue = input.substring(0, Math.min(input.length(), 2));
+                expectedValue = DataHelper.cutAboveMaxSymbols(input, 2);
                 break;
             case "holder":
-                expectedValue = input.substring(0, Math.min(input.length(), 19));
+                expectedValue = DataHelper.cutAboveMaxSymbols(input, 19);
                 break;
             case "cvc":
-                expectedValue = input.substring(0, Math.min(input.length(), 3));
+                expectedValue = DataHelper.cutAboveMaxSymbols(input, 3);
                 break;
         }
-        fields.get(field).setValue(input);
-        Assertions.assertEquals(expectedValue, fields.get(field).val());
+        fields.get(field).setValue(input).shouldBe(Condition.value(expectedValue));
+        System.out.println(expectedValue);
+        System.out.println(fields.get(field).val());
     }
 }

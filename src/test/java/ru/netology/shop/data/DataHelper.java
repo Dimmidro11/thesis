@@ -5,7 +5,9 @@ import lombok.Value;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class DataHelper {
@@ -26,6 +28,11 @@ public class DataHelper {
     public static class Date {
         private String month;
         private String year;
+    }
+
+    public static CardInfo generateValidCard(boolean approved) {
+        String cardNumber = approved ? "1111222233334444" : "5555666677778888";
+        return generateCard(cardNumber);
     }
 
     public static CardInfo generateCard(String cardNumber) {
@@ -134,5 +141,9 @@ public class DataHelper {
                     charAt(random.nextInt(specialSymbolsAlphabet.length())));
         }
         return sb.toString();
+    }
+
+    public static String cutAboveMaxSymbols (String input, int maxLength) {
+        return input.substring(0, Math.min(input.length(), maxLength));
     }
 }
