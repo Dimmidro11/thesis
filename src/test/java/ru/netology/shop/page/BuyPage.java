@@ -1,9 +1,9 @@
 package ru.netology.shop.page;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.WebElement;
 import ru.netology.shop.data.DataHelper;
 
 import java.time.Duration;
@@ -102,26 +102,13 @@ public class BuyPage {
         fields.get(field).setValue(input).shouldBe(empty);
     }
 
-    public void checkAboveMaxInput(String field, String input) {
+    public void checkAboveMaxInput(String field, String input, int length) {
         String expectedValue = "";
-        switch (field) {
-            case "number":
-                expectedValue = DataHelper.cutAboveMaxSymbols(input, 16);
-                expectedValue = expectedValue.replaceAll(".{4}", "$0 ").trim();
-                break;
-            case "month":
-            case "year":
-                expectedValue = DataHelper.cutAboveMaxSymbols(input, 2);
-                break;
-            case "holder":
-                expectedValue = DataHelper.cutAboveMaxSymbols(input, 19);
-                break;
-            case "cvc":
-                expectedValue = DataHelper.cutAboveMaxSymbols(input, 3);
-                break;
+        if (field.equals("number")) {
+            expectedValue = input.substring(0, Math.min(input.length(), length)).replaceAll(".{4}", "$0 ").trim();
+        } else {
+            expectedValue = input.substring(0, Math.min(input.length(), length));
         }
-        fields.get(field).setValue(input).shouldBe(Condition.value(expectedValue));
-        System.out.println(expectedValue);
-        System.out.println(fields.get(field).val());
+        fields.get(field).setValue(input).should(Condition.exactValue(expectedValue));
     }
 }

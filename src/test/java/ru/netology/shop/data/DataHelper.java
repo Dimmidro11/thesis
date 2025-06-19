@@ -142,8 +142,4 @@ public class DataHelper {
         }
         return sb.toString();
     }
-
-    public static String cutAboveMaxSymbols (String input, int maxLength) {
-        return input.substring(0, Math.min(input.length(), maxLength));
-    }
 }
