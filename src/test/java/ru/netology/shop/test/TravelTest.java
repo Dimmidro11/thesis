@@ -484,7 +484,7 @@ public class TravelTest {
     void shouldNotInputCardNumAbove16numbers() {
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAboveMaxInput("number", DataHelper.generateRequiredNumber(17, 99), 16);
+        buyPage.checkAboveMaxInput("number", DataHelper.generateRequiredNumber(17, 99, 16));
     }
 
     @Test
@@ -507,7 +507,7 @@ public class TravelTest {
     void shouldNotInputMonthAbove2numbers() {
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAboveMaxInput("month", DataHelper.generateRequiredNumber(3, 99), 2);
+        buyPage.checkAboveMaxInput("month", DataHelper.generateRequiredNumber(3, 99, 2));
     }
 
     @Test
@@ -530,7 +530,7 @@ public class TravelTest {
     void shouldNotInputYearAbove2numbers() {
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAboveMaxInput("year", DataHelper.generateRequiredNumber(3, 99), 2);
+        buyPage.checkAboveMaxInput("year", DataHelper.generateRequiredNumber(3, 99, 2));
     }
 
     @Test
@@ -553,7 +553,7 @@ public class TravelTest {
     void shouldNotInputHolderAboveMaxSymbols() {
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAboveMaxInput("holder", DataHelper.generateLatinString(31, 40), 20);
+        buyPage.checkAboveMaxInput("holder", DataHelper.generateLatinString(31, 40, 20));
     }
 
     @Test
@@ -576,6 +576,6 @@ public class TravelTest {
     void shouldNotInputCvcAboveMaxSymbols() {
         var startPage = new StartPage();
         var buyPage = startPage.clickBuyButton();
-        buyPage.checkAboveMaxInput("cvc", DataHelper.generateRequiredNumber(4, 10), 3);
+        buyPage.checkAboveMaxInput("cvc", DataHelper.generateRequiredNumber(4, 10, 3));
     }
 }

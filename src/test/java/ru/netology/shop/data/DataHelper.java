@@ -30,6 +30,12 @@ public class DataHelper {
         private String year;
     }
 
+    @Value
+    public static class Input {
+        private String input;
+        private String expected;
+    }
+
     public static CardInfo generateValidCard(boolean approved) {
         String cardNumber = approved ? "1111222233334444" : "5555666677778888";
         return generateCard(cardNumber);
@@ -53,6 +59,20 @@ public class DataHelper {
         return faker.number().digits(
                 faker.number().numberBetween(minQuantityNumber, maxQuantityNumber)
         );
+    }
+
+    public static Input generateRequiredNumber(int minQuantityNumber, int maxQuantityNumber, int maxInputLength) {
+        String input = generateRequiredNumber(minQuantityNumber, maxQuantityNumber);
+        String expected;
+        if (maxInputLength == 16) {
+            expected = input.substring(0, Math.min(input.length(), maxInputLength)).replaceAll(".{4}", "$0 ").trim();
+        } else {
+            expected = input.substring(0, Math.min(input.length(), maxInputLength));
+        }
+        return new Input(
+                input,
+                expected
+                );
     }
 
     public static String generateRandomNumber2Symbol(int minCount, int maxCount) {
@@ -127,6 +147,15 @@ public class DataHelper {
                     charAt(random.nextInt(latinAlphabet.length())));
         }
         return sb.toString();
+    }
+
+    public static Input generateLatinString(int minQuantity, int maxQuantity, int maxInputLength) {
+        String input = generateLatinString(minQuantity, maxQuantity);
+        String expected = input.substring(0, Math.min(input.length(), maxInputLength));
+        return new Input(
+                input,
+                expected
+        );
     }
 
     public static String generateSpecialSymbols() {

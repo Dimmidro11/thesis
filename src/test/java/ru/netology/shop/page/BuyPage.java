@@ -102,13 +102,7 @@ public class BuyPage {
         fields.get(field).setValue(input).shouldBe(empty);
     }
 
-    public void checkAboveMaxInput(String field, String input, int length) {
-        String expectedValue = "";
-        if (field.equals("number")) {
-            expectedValue = input.substring(0, Math.min(input.length(), length)).replaceAll(".{4}", "$0 ").trim();
-        } else {
-            expectedValue = input.substring(0, Math.min(input.length(), length));
-        }
-        fields.get(field).setValue(input).should(Condition.exactValue(expectedValue));
+    public void checkAboveMaxInput(String field, DataHelper.Input input) {
+        fields.get(field).setValue(input.getInput()).should(Condition.exactValue(input.getExpected()));
     }
 }
